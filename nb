@@ -1,0 +1,20 @@
+#!/bin/csh -f
+
+#This command will insert text into a notebook.txt file in your home directory
+
+#I added a very basic paramter settings though I know there is a better way to do this
+
+#To not have a header with the date
+if ( "$1" == 'n' ) then
+echo $2 >> ~/notebook.txt
+else
+#Display the last 40 lines of the notebook
+if ( "$1" == "t" ) then
+tail -n 40 ~/notebook.txt
+else
+#add the date and then echo the contents contained in parenthesis followed by an empty line
+date >> ~/notebook.txt
+echo $1 >> ~/notebook.txt
+echo "" >> ~/notebook.txt
+endif
+endif
