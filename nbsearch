@@ -1,0 +1,9 @@
+#!/bin/csh -f
+
+#a notebook search function that highlights regular expression based on grep color command
+
+if ( "$1" == "num" ) then
+more +$2 ~/notebook.txt
+else
+more ~/notebook.txt | grep --color -n -P -A 4 -B 4 $1
+endif
