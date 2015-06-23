@@ -1,0 +1,14 @@
+#!/bin/csh -f
+
+if ( "$1" == 'n' ) then
+echo $2 >> README
+echo $2 >> ~/notebook.txt
+else
+echo "" >> README
+date >> README
+echo $1 >> README
+echo "" >> ~/notebook.txt
+date >> ~/notebook.txt
+pwd >> ~/notebook.txt
+echo $1 >> ~/notebook.txt
+endif
