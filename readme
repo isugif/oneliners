@@ -1,14 +1,26 @@
-#!/bin/csh -f
+#!/bin/bash
 
-if ( "$1" == 'n' ) then
-echo $2 >> README
-echo $2 >> ~/notebook.txt
-else
-echo "" >> README
-date >> README
-echo $1 >> README
-echo "" >> ~/notebook.txt
-date >> ~/notebook.txt
-pwd >> ~/notebook.txt
-echo $1 >> ~/notebook.txt
-endif
+
+n=""
+options="n"
+DATE=`date "+%m/%d/%y %k:%M:%S"`
+export LASTDATE=`tail -n 1 README | cut -f 1`
+PWD=`pwd`
+COMMENT=$1
+
+
+NUMARGS=$#
+echo -e \\n"Number of arguments: $NUMARGS"
+if [ $NUMARGS -eq 1 ]; then
+		echo -e "$DATE\t$PWD\t$COMMENT" >> README
+		echo -e "$DATE\t$PWD\t$COMMENT" >> ~/notebook.txt                
+fi
+
+while getopts $options option
+	do
+		case $option in
+		n ) 
+                echo -e "$LASTDATE\t$PWD\t$2" >> README		
+		;;
+		esac
+	done
