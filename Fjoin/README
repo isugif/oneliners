@@ -1,0 +1,2 @@
+#example These two files are joining on the coordinates and the chromosome but not in a gff.
+/opt/fjoin/fjoin.py --columns1=1,2,3 --columns2=1,2,3 -s both -1 gene_exp.diff.yes.coords.sort1 -2 miRNAbase.Gm.coords.sort1 > Known.miRNAs
