@@ -1,0 +1,42 @@
+#!/bin/sh
+
+asub "R CMD BATCH '092509dartclusteringscript.R 1'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 2'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 3'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 4'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 5'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 6'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 7'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 8'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 9'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 10'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 11'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 12'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 13'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 14'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 15'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 16'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 17'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 18'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 19'"
+sleep 1
+asub "R CMD BATCH '092509dartclusteringscript.R 20'"
+

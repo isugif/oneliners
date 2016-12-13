@@ -1,0 +1,117 @@
+
+source('092509dartclusteringcleanedup.R')
+#required libraries
+library(gplots)
+#library(intervals)
+
+directory<-'/Volumes/severin/Documents/Rworking/dataAnalysis/'
+directory<-'./'
+#starting parameters 
+	numofsims<-1000
+	#normalized data
+	Anorm<-read.table(paste(directory,'GlymaIDCounts.table.rearranged',sep=''))
+	AllGeneCalls<-rownames(Anorm)
+	#chromosome lengths and Gene model coordinates
+	chrom<-read.table(paste(directory,'chromosome.gff',sep=''))
+	geneCoordinates<-read.table(paste(directory,'Glyma1.coords.table',sep=''))
+	#list with genes of interest
+	GeneCallsofInterest<-as.matrix(read.table(paste(directory,'Glymanames',sep="")))
+	numberOfChromosome<-commandArgs()[4]
+	#important the the vector in this forloop results in binsizes that include the binsizes before it
+	StartingBinsize<-1200000
+	#for binsize 1.2mill 600k 300k 100k, 50k, 10k
+	binscales<-c(1,2,4,12,24,120)
+
+#variables calculated from the input parameters
+	geneCoordinatesAve<-matrix(round((geneCoordinates[,3]+geneCoordinates[,4])/2),ncol=1)
+	rownames(geneCoordinatesAve)<-rownames(geneCoordinates)
+	chromosomelengthAll<-chrom[,4]
+
+	maxchromosomelength<-max(chrom[,4])
+	significantIntervalsOrig<-0
+
+
+#this for loop will cycle through your chromosomes.
+#for (i in 1:numberOfChromosome){
+for (i in numberOfChromosome:numberOfChromosome){
+	#create directory to export outfiles
+	dir.create(paste("./",i,sep=""))
+	chromosomelength<-chromosomelengthAll[i]
+
+maxNumGenesInCluster<-0
+
+
+genes<-identifyGenesOnChromosomeForSoybean(GeneCallsofInterest)
+#generate the simulated data
+
+bootData<-simulateData(numofsims,AllGeneCalls,geneCoordinates,genes)
+
+
+
+	#binSize for loop will cycle through the binsizes determined above
+	for (b in binscales){
+		
+		binsize<-StartingBinsize/b
+		print(binsize)
+		#this variable is used for the outputfiles to distinguish between bins
+		appendtofilename<-paste("_",binsize/binscales,sep="")
+
+		
+		#for retrieval of the coordinates of the gene models
+		geneIndexCoords<-function(input){IndexFromGeneCall(geneCoordinates,genes[input])}
+		geneIndexValues<-sapply(1:length(genes),geneIndexCoords)
+
+
+		#function to do bootstrap method
+		#print("bootstrap")
+		significantIntervals<-clusterByBoostrap(chromosomelength,binsize,geneIndexValues,geneCoordinatesAve,AllGeneCalls,numofsims,bootData)
+		#print("endbootstrap")
+		print(significantIntervals)
+		
+		
+		if (b==binscales[1]){
+		#determine the maximum number of genes in the all bins.
+		
+		#open a pdf file
+		pdf(file=paste(i,"/chrom",i,"ALL",".pdf",sep=""),paper="special",height=7,width=225)
+		plot(0:1, 0:1, type="n", axes=FALSE, ann=FALSE)
+		}
+		#if there are no significant Intervals go to the next binsize in the loop
+		
+		if(significantIntervals==0){
+			next
+		}
+
+			intervalstart<-significantIntervals[,1]
+			intervalend<-significantIntervals[,2]
+			intervalheight<-significantIntervals[,3]
+			currentBinScale<-b
+		
+		
+
+			if (maxNumGenesInCluster==0){
+				maxNumGenesInCluster<-max(significantIntervals[,3])+1
+			}
+			
+			geneCoordinatesAveOfInterest<-matrix(geneCoordinatesAve[geneIndexValues],ncol=1)
+			rownames(geneCoordinatesAveOfInterest)<-rownames(geneCoordinates)[geneIndexValues]
+			ChromosomePlot(chromosomelength,intervalstart,intervalend,intervalheight,maxNumGenesInCluster,maxchromosomelength, binScales, currentBinScale,geneCoordinatesAveOfInterest)
+			
+			if(b==binscales[length(binscales)]){
+			#now that the plotting is finished, close the pdf file
+			dev.off()
+			}
+			#only export gene lists if there are intervals that are significant
+			if (sum(significantIntervals!=0)){	
+			exportGeneLists(appendtofilename[1],significantIntervals,geneCoordinates,geneIndexValues,Anorm)
+			}
+
+	}
+	#these commands save the R sessions for each chromosome into each chromosome folder respectively.
+	save.image(file = paste(i,"/.RData",i,sep=""))
+	savehistory(file = paste(i,"/.Rhistory",i,sep=""))
+}
+
+
+
+
