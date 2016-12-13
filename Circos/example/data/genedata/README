@@ -1,0 +1,8 @@
+> cp /net/bioteam/Volumes/RAID/Users/severin//persistentdata/lotuspersistent/Glyma1.gene.tab .
+> cp /net/bioteam/Volumes/RAID/Users/severin/Protocols/Genomes/VitisVinifera/Vitis_vinifera_gene.data .
+
+#create the link data
+more /net/bioteam/Volumes/RAID/Users/severin/Protocols/BLAST/SyntenyPaper/VitisVinifera/suppFiles/Clade1.Vvinifera.orthologs.topBlasthits.txt | cut -f 1,2 | perl -pe 's/\./ /g' | awk '{print $1,$3}' | sort | uniq | awk '{print $1;print $2}' | perl -pe 's/GSVIVT/GSVIVG/g' | xargs -I xx grep xx Gm_Vv.genes | awk 'BEGIN{count=1} NR%2 {print "hom"count,$1,$4,$5} !(NR%2) {print "hom"count,"Vv"$1,$4,$5;count++}' > Gm_Vv_link.data
+
+> more /net/bioteam/Volumes/RAID/Users/severin/Protocols/BLAST/SyntenyPaper/VitisVinifera/suppFiles/Clade2.Vvinifera.orthologs.topBlasthits.txt | cut -f 1,2 | perl -pe 's/\./ /g' | awk '{print $1,$3}' | sort | uniq | awk '{print $1;print $2}' | perl -pe 's/GSVIVT/GSVIVG/g' | xargs -I xx grep xx Gm_Vv.genes | awk 'BEGIN{count=1} NR%2 {print "hom"count,$1,$4,$5} !(NR%2) {print "hom"count,"Vv"$1,$4,$5;count++}' > Gm_Vv_link.data.Clade2
+> more /net/bioteam/Volumes/RAID/Users/severin/Protocols/BLAST/SyntenyPaper/VitisVinifera/suppFiles/Clade3.Vvinifera.orthologs.topBlasthits.txt | cut -f 1,2 | perl -pe 's/\./ /g' | awk '{print $1,$3}' | sort | uniq | awk '{print $1;print $2}' | perl -pe 's/GSVIVT/GSVIVG/g' | xargs -I xx grep xx Gm_Vv.genes | awk 'BEGIN{count=1} NR%2 {print "hom"count,$1,$4,$5} !(NR%2) {print "hom"count,"Vv"$1,$4,$5;count++}' > Gm_Vv_link.data.Clade3

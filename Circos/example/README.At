@@ -1,0 +1,8 @@
+#determine the lengths of the chromosomes in Arabidopsis thaliana
+gzcat /net/bioteam/Volumes/RAID/Users/severin/Protocols/Genomes/ArabadopsisThaliana/Athaliana_130.fa.gz | /net/bioteam/Volumes/RAID/Users/severin/scripts/awkscripts/seqlen.awk > Athaliana.chr
+#creation of karyotype file for At
+more Athaliana.chr | awk '{OFS="\t"}{print "chr -","At"$1,substr($1,4,10),1,$2,"red"}' > Karyotype/karyotype.Athaliana_130_Pv6.txt
+#130 corresponds to the tair release and Pv6 is phytozome 6
+
+more /net/bioteam/Volumes/RAID/Users/severin/projects/SYNTENY/BLAST/ArabadopsisThaliana/topblasthits.txt | cut -f 1,2 | perl -pe 's/\./ /g' | awk '{print $1,$3}' | sort | uniq | awk '{print $1;print $2}' | xargs -I xx grep xx Gm_At.genes | awk 'BEGIN{count=1} NR%2 {print "hom" count,$1,$4,$5} !(NR%2) {print "hom"count,"At"$1,$4,$5;count++}' > Gm_At_link.data
+

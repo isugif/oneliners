@@ -1,0 +1,19 @@
+#circos is configuration file based
+#the command to start circos is circos -conf circos.conf
+#The conf file calls several types of files including a karyotype file, a color file, ideogram file a data file that contains links
+#the datafile with links or homologies between genes or objects is found in the data folder and examples and generation of which is seen below or in the data file.
+
+#creation of the karyotype file
+more /net/bioteam/Volumes/RAID/Users/severin/persistentdata/lotuspersistent/chromosome.gff | egrep Gm | awk '{print "chr - ",$1,NR,$4,$5,"orange"}' > karyotype.Gmax.txt
+
+#determine the lengths of the chromosomes in Vitis Vinifera 12x
+gzcat /net/bioteam/Volumes/RAID/Users/severin/Protocols/Genomes/VitisVinifera/ASSEMBLY/Vvinifera_145.fa.gz | /net/bioteam/Volumes/RAID/Users/severin/scripts/awkscripts/seqlen.awk > Vvitis.chr
+
+#creation of karyotype file for Grape
+more Vvitis.chr | awk '{OFS="\t"}{print "chr -","Vv"$1,substr($1,4,10),1,$2,"brown"}' > Karyotype/karyotype.Vvinifera12x.txt
+
+#for the creation of the links I need the gene position data for grape and soybean
+#peformed on bioteam at /Users/severin/Protocols/Genomes/VitisVinifera
+more Vitis_vinifera_annotation.gff  | egrep gene > Vitis_vinifera_gene.data
+> cp /net/bioteam/Volumes/RAID/Users/severin//persistentdata/lotuspersistent/Glyma1.gene.tab .
+> cp /net/bioteam/Volumes/RAID/Users/severin/Protocols/Genomes/VitisVinifera/Vitis_vinifera_gene.data .

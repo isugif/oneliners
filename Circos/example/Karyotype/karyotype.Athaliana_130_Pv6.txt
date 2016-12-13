@@ -1,0 +1,7 @@
+chr -	AtChr1	1	1	30427671	red
+chr -	AtChr2	2	1	19698289	red
+chr -	AtChr3	3	1	23459830	red
+chr -	AtChr4	4	1	18585056	red
+chr -	AtChr5	5	1	26975502	red
+chr -	AtChrM	M	1	366924	red
+chr -	AtChrC	C	1	154478	red
