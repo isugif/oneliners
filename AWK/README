@@ -1,0 +1,20 @@
+#good awk scripts
+
+awk 'BEGIN{family_number=1} NF==0 {family_number++; print " "} NF>0 {print "family_"family_number, $0}'
+
+#print the same thing in the beginning every other line
+| awk 'BEGIN{count=1} NR%2 {print "hom"count,$1,$4,$5} !(NR%2) {print "hom"count,"Vv"$1,$4,$5;count++}'
+
+#sum of column
+| awk '{ sum+=$2} END {print sum}'
+
+#N50 calculation
+more RAY_Hp29755_10-20-2011.ScaffoldLengths.txt | sort -k 2rn,2rn | awk '{print $2}' | awk 'BEGIN {sum=0} {sum += $1; print $1, sum}' | tac - | awk 'NR==1 {halftot=$2/2} lastsize>halftot && $2<halftot {print} {lastsize=$2}
+
+#parsing GSNAP output
+cat GenesofInterest.unpaired_* | egrep -v @ | awk '/>/ {ID=">"$3}/_/{print ID"_XX_"$3;print $1}' | perl -pe 's/[,-]//g' > GenesofInterest.1-15.fasta`
+
+#for comparing multiple lines and determine the best of the matches with the same id
+| awk 'BEGIN{str=$0; geneid="Cp"; count=1;} (geneid!=$1) {print str; geneid=$1; count=1;} (geneid==$1 && count>$11) {count=$11;str=$0;}' 
+
+more C_picta_V3_predictions_cDNAs.gff | tr '=' ' ' | awk 'BEGIN{parent=559970;} ($parent!=$11 && $3!="transcript") {print $1,$2,"transcript",$;print $0;parent=$11;print parent} (parent==$11) {print $0}' | more
